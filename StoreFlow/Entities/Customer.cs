@@ -1,4 +1,6 @@
-﻿namespace StoreFlow.Entities
+﻿using NuGet.Repositories;
+
+namespace StoreFlow.Entities
 {
     public class Customer
     {
@@ -9,5 +11,6 @@
         public string? CustomerDistrict { get; set; }
         public decimal CustomerBalance { get; set; }
         public string? CustomerImageUrl { get; set; }
+        public List<Order> Orders { get; set; }
     }
 }
