@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using StoreFlow.Context;
+using StoreFlow.Entities;
 
 namespace StoreFlow.Controllers
 {
@@ -48,6 +51,83 @@ namespace StoreFlow.Controllers
             }
             var orderValues = _context.Orders.ToList();
             return View(orderValues);
+        }
+
+        public async Task<IActionResult> OrderList()
+        {
+            var values = await _context.Orders.Include(x=>x.Product).Include(x => x.Customer).ToListAsync();
+            return View(values);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CreateOrder()
+        {
+
+            var products = await _context.Products
+                                  .Select(p => new SelectListItem
+                                  {
+                                      Value = p.ProductId.ToString(),
+                                      Text = p.ProductName
+                                  }).ToListAsync();
+            ViewBag.products = products;
+
+            var customers = await _context.Customers
+                                .Select(c => new SelectListItem
+                                {
+                                    Value = c.CustomerId.ToString(),
+                                    Text = c.CustomerName + " " + c.CustomerSurname
+                                }).ToListAsync();
+            ViewBag.customers = customers;
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateOrder(Order order)
+        {
+            order.Status = "Sipariş Alındı";
+            order.OrderDate = DateTime.Now;
+            await _context.Orders.AddAsync(order);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("OrderList");
+        }
+        public async Task<IActionResult> DeleteOrder(int id)
+        {
+            var value = await _context.Orders.FindAsync(id);
+            _context.Orders.Remove(value);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("OrderList");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> UpdateOrder(int id)
+        {
+            var products = await _context.Products
+                                .Select(p => new SelectListItem
+                                {
+                                    Value = p.ProductId.ToString(),
+                                    Text = p.ProductName
+                                }).ToListAsync();
+            ViewBag.products = products;
+
+            var customers = await _context.Customers
+                                .Select(c => new SelectListItem
+                                {
+                                    Value = c.CustomerId.ToString(),
+                                    Text = c.CustomerName + " " + c.CustomerSurname
+                                }).ToListAsync();
+            ViewBag.customers = customers;
+
+            var value = await _context.Orders.FindAsync(id);
+            return View(value);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateOrder(Order order)
+        {
+            _context.Orders.Update(order);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("OrderList");
         }
     }
 }

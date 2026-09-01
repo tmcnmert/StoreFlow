@@ -1,37 +1,137 @@
-﻿<nav class="sidebar sidebar-offcanvas" id="sidebar">
+﻿@{
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+
+    string IsActive(string controller, string action)
+    {
+        return currentController == controller && currentAction == action ? "active" : "";
+    }
+}
+
+<nav class="sidebar sidebar-offcanvas" id="sidebar">
     <ul class="nav">
+
         <li class="nav-item nav-profile">
             <div class="nav-link">
                 <div class="profile-image">
                     <img src="/Melody-Premium-Bootstrap-Admin-Dashboard-Template/images/faces/face5.jpg" alt="image" />
                 </div>
+
                 <div class="profile-name">
                     <p class="name">
-                        Mert Timoçin
+                        Hoşgeldin Mert
                     </p>
                     <p class="designation">
-                        Super Admin
+                        Süper Admin
                     </p>
                 </div>
             </div>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="index-2.html">
+
+        <!-- Dashboard -->
+        <li class="nav-item @IsActive("Dashboard", "Index")">
+            <a class="nav-link" href="/Dashboard/Index/">
                 <i class="fa fa-home menu-icon"></i>
                 <span class="menu-title">Dashboard</span>
             </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="pages/widgets.html">
+
+z""
+        <!-- İstatistikler -->
+        <li class="nav-item @IsActive("Dashboard", "Statistics")">
+            <a class="nav-link" href="/Dashboard/Statistics/">
                 <i class="fa fa-puzzle-piece menu-icon"></i>
                 <span class="menu-title">İstatistikler</span>
             </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="pages/documentation.html">
-                <i class="far fa-file-alt menu-icon"></i>
+
+        <!-- Kategoriler -->
+        <li class="nav-item @IsActive("Category", "CategoryList")">
+            <a class="nav-link" href="/Category/CategoryList/">
+                <i class="fa fa-tags menu-icon"></i>
                 <span class="menu-title">Kategoriler</span>
             </a>
         </li>
+
+        <!-- Müşteri Listesi - İsme Göre -->
+        <li class="nav-item @IsActive("Customer", "CustomerListOrderByCustomerName")">
+            <a class="nav-link" href="/Customer/CustomerListOrderByCustomerName/">
+                <i class="fa fa-users menu-icon"></i>
+                <span class="menu-title">Müşteri Listesi (İsme Göre)</span>
+            </a>
+        </li>
+
+        <!-- Müşteri Listesi - Bakiyeye Göre -->
+        <li class="nav-item @IsActive("Customer", "CustomerListOrderByDescBalance")">
+            <a class="nav-link" href="/Customer/CustomerListOrderByDescBalance/">
+                <i class="fa fa-credit-card menu-icon"></i>
+                <span class="menu-title">Müşteri Listesi (Bakiyeye Göre)</span>
+            </a>
+        </li>
+
+        <!-- Şehre Göre Arama -->
+        <li class="nav-item @IsActive("Customer", "CustomerGetByCity")">
+            <a class="nav-link" href="/Customer/CustomerGetByCity/">
+                <i class="fa fa-map-marker menu-icon"></i>
+                <span class="menu-title">Şehre Göre Arama</span>
+            </a>
+        </li>
+
+        <!-- Ürün Listesi -->
+        <li class="nav-item @IsActive("Product", "ProductList")">
+            <a class="nav-link" href="/Product/ProductList/">
+                <i class="fa fa-cubes menu-icon"></i>
+                <span class="menu-title">Ürün Listesi</span>
+            </a>
+        </li>
+
+        <!-- İlk 5 Ürün -->
+        <li class="nav-item @IsActive("Product", "First5ProductList")">
+            <a class="nav-link" href="/Product/First5ProductList/">
+                <i class="fa fa-star menu-icon"></i>
+                <span class="menu-title">Ürün Listesi (İlk 5 Ürün)</span>
+            </a>
+        </li>
+
+        <!-- 4 Ürün -->
+        <li class="nav-item @IsActive("Product", "Skip4ProductList")">
+            <a class="nav-link" href="/Product/Skip4ProductList/">
+                <i class="fa fa-list-ol menu-icon"></i>
+                <span class="menu-title">Ürün Listesi (4 Ürün)</span>
+            </a>
+        </li>
+
+        <!-- Sipariş Listesi -->
+        <li class="nav-item @IsActive("Order", "OrderList")">
+            <a class="nav-link" href="/Order/OrderList/">
+                <i class="fa fa-shopping-cart menu-icon"></i>
+                <span class="menu-title">Sipariş Listesi</span>
+            </a>
+        </li>
+
+        <!-- Stok Sayısı 5'ten Küçük -->
+        <li class="nav-item @IsActive("Order", "AllStockSmallerThen5")">
+            <a class="nav-link" href="/Order/AllStockSmallerThen5/">
+                <i class="fa fa-exclamation-triangle menu-icon"></i>
+                <span class="menu-title">Sipariş Listesi (Stok Sayısı &lt; 5)</span>
+            </a>
+        </li>
+
+        <!-- Duruma Göre Sipariş -->
+        <li class="nav-item @IsActive("Order", "OrderListByStatus")">
+            <a class="nav-link" href="/Order/OrderListByStatus/">
+                <i class="fa fa-tasks menu-icon"></i>
+                <span class="menu-title">Duruma Göre Sipariş Listesi</span>
+            </a>
+        </li>
+
+        <!-- Sipariş Arama -->
+        <li class="nav-item @IsActive("Order", "OrderListSearch")">
+            <a class="nav-link" href="/Order/OrderListSearch/">
+                <i class="fa fa-search menu-icon"></i>
+                <span class="menu-title">Sipariş Arama</span>
+            </a>
+        </li>
+
     </ul>
 </nav>
