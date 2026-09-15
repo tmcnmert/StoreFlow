@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StoreFlow.Context;
 using StoreFlow.Entities;
+using StoreFlow.Models;
 
 namespace StoreFlow.Controllers
 {
@@ -83,19 +84,19 @@ namespace StoreFlow.Controllers
                 .ToList();
             return View(groupedCustomers);
         }
-        //public IActionResult CustomersByCityCount()
-        //{
-        //    var query =
-        //        from c in _context.Customers
-        //        group c by c.CustomerCity into cityGroup
-        //        select new CustomerCityGroup
-        //        {
-        //            City = cityGroup.Key,
-        //            CustomerCount = cityGroup.Count()
-        //        };
-        //    var model = query.ToList();
-        //    return View(model);
-        //}
+       public IActionResult CustomersByCityCount()
+       {
+           var query =
+               from c in _context.Customers
+               group c by c.CustomerCity into cityGroup
+               select new CustomerCityGroup
+               {
+                   City = cityGroup.Key,
+                   CustomerCount = cityGroup.Count()
+               };
+           var model = query.ToList();
+           return View(model);
+       }
 
         public IActionResult CustomerCityList()
         {
