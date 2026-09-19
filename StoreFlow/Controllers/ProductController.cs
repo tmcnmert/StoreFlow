@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using StoreFlow.Context;
 using StoreFlow.Entities;
+using StoreFlow.Models;
 
 namespace StoreFlow.Controllers
 {
@@ -84,10 +85,53 @@ namespace StoreFlow.Controllers
             var values = _context.Products.Include(x => x.Category).Skip(4).Take(10).ToList();
             return View(values);
         }
-
         public IActionResult CreateProductWithAttach()
         {
             return View();
+        }
+
+
+        [HttpPost]
+        public IActionResult CreateProductWithAttach(Product product)
+        {
+            var category = new Category { CategoryId = 1 };
+            _context.Categories.Attach(category);
+
+            var productValue = new Product
+            {
+                ProductName = product.ProductName,
+                ProductPrice = product.ProductPrice,
+                ProductStock = product.ProductStock,
+                Category = category
+            };
+
+            _context.Products.Add(productValue);
+            _context.SaveChanges();
+            return RedirectToAction("ProductList");
+        }
+        public IActionResult ProductCount()
+        {
+            var value = _context.Products.LongCount();
+            var lastProduct = _context.Products.OrderBy(x => x.ProductId).Last();
+            ViewBag.v2 = lastProduct.ProductName;
+            ViewBag.v = value;
+            return View();
+        }
+
+        public IActionResult ProductListWithCategory()
+        {
+            var result = from c in _context.Categories
+                         join p in _context.Products
+                         on
+                         c.CategoryId equals p.CategoryId
+                         select new ProductWithCategoryViewModel
+                         {
+                             ProductName = p.ProductName,
+                             ProductStock = p.ProductStock,
+                             CategoryName = c.CategoryName
+                         };
+
+            return View(result.ToList());
         }
 
     }
