@@ -58,5 +58,19 @@ namespace StoreFlow.Controllers
             }
             return RedirectToAction("CategoryList");
         }
+        public IActionResult ReverseCategory()
+        {
+
+
+            var categoryvalue = _context.Categories.First();
+            ViewBag.v = categoryvalue.CategoryName;
+
+            var categoryValue2 = _context.Categories.SingleOrDefault(x => x.CategoryName == "Bilgisayar");
+            ViewBag.v2 = categoryValue2.CategoryStatus + "-" + categoryValue2.CategoryId.ToString();
+
+            var values = _context.Categories.OrderBy(x => x.CategoryId).ToList();
+            values.Reverse();
+            return View(values);
+        }
     }
 }
